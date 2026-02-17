@@ -21,8 +21,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('cards.urls')), # Подключаем наше приложение к главной странице
 ]
 
 # Это магическая строчка, которая позволяет Django "раздавать" загруженные файлы
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

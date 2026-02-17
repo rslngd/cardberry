@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ deck.title }} - Cardberry</title>
+</head>
+
+<body>
+    <a href="{% url 'deck_list' %}">← Назад к списку</a>
+    <h1>Колода: {{ deck.title }}</h1>
+
+    <div class="card-container">
+        {% for card in cards %}
+        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+            <strong>{{ card.term }}</strong> — {{ card.translation }}
+
+            {% if card.image %}
+            <br><img src="{{ card.image.url }}" alt="{{ card.term }}" style="max-width: 200px;">
+            {% endif %}
+
+            {% if card.pdf_file %}
+            <br><a href="{{ card.pdf_file.url }}" target="_blank">Открыть PDF</a>
+            {% endif %}
+        </div>
+        {% empty %}
+        <p>В этой колоде пока нет карточек.</p>
+        {% endfor %}
+    </div>
+</body>
+
+</html>

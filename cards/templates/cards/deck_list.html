@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cardberry - Meine Stapel</title>
+</head>
+
+<body>
+    <h1>Meine Lernstapel (Мои колоды)</h1>
+    <ul>
+        {% for deck in decks %}
+        <li><a href="{% url 'deck_detail' pk=deck.pk %}">{{ deck.title }}</a> (Карточек: {{ deck.cards.count }})</li>
+        {% empty %}
+        <li>Пока нет ни одной колоды.</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
