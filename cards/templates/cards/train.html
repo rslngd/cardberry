@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Training: {{ deck.title }}{% endblock %}
+
+{% block content %}
+<div style="max-width: 500px; margin: 0 auto; text-align: center;">
+
+    <p style="margin: 0 0 15px 0; color: #7f8c8d; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+        {{ deck.title }}
+    </p>
+
+    {% if card %}
+    <div
+        style="background: white; border-radius: 20px; padding: 25px; box-shadow: 0 8px 25px rgba(0,0,0,0.06); border: 1px solid #eee; display: flex; flex-direction: column; align-items: center;">
+
+        <div
+            style="width: 200px; height: 200px; background-color: #f8f9fa; border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; border: 1px solid #f0f0f0;">
+            <img id="placeholder-img" src="https://placehold.co/200x200/f0f2f5/6495ED?text=?"
+                style="width: 100%; height: 100%; object-fit: cover;">
+
+            {% if card.image %}
+            <img id="real-img" src="{{ card.image.url }}"
+                style="display: none; width: 100%; height: 100%; object-fit: cover;">
+            {% endif %}
+        </div>
+
+        <div style="width: 100%; margin-bottom: 25px;">
+            <div class="gender-{{ card.gender|default:'none' }}"
+                style="font-size: 32px; font-weight: 800; line-height: 1.2;">
+                {{ card.term }}
+            </div>
+
+            <div id="translation-block"
+                style="visibility: hidden; font-size: 26px; font-weight: 600; color: #2c3e50; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0;">
+                {{ card.translation }}
+            </div>
+        </div>
+
+        <div style="width: 100%; height: 55px; display: flex; align-items: center; justify-content: center;">
+            <button id="btn-show" class="btn btn-primary" onclick="showAnswer()"
+                style="width: 100%; max-width: 250px; height: 50px; font-size: 1rem; font-weight: bold;">
+                Antwort zeigen
+            </button>
+
+            <button id="btn-next" class="btn" onclick="location.reload()"
+                style="display: none; width: 100%; max-width: 250px; height: 50px; font-size: 1rem; font-weight: bold; background-color: #2ecc71; color: white;">
+                Nächste Karte
+            </button>
+        </div>
+
+    </div>
+    {% else %}
+    <div class="container">В этой колоде пока нет карточек.</div>
+    {% endif %}
+
+    <a href="{% url 'deck_detail' deck.pk %}"
+        style="display: inline-block; margin-top: 25px; color: #bdc3c7; text-decoration: none; font-size: 0.9rem;">
+        ← Zurück zum Stapel
+    </a>
+</div>
+
+<script>
+    function showAnswer() {
+        document.getElementById('translation-block').style.visibility = 'visible';
+        document.getElementById('btn-show').style.display = 'none';
+        document.getElementById('btn-next').style.display = 'block';
+
+        var realImg = document.getElementById('real-img');
+        var placeholderImg = document.getElementById('placeholder-img');
+
+        if (realImg) {
+            placeholderImg.style.display = 'none';
+            realImg.style.display = 'block';
+        }
+    }
+</script>
+{% endblock %}

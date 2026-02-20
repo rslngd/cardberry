@@ -1,32 +1,81 @@
-<!DOCTYPE html>
-<html lang="de">
+{% extends "base.html" %} {% block title %}Содержание колоды - {{ deck.title }}{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>{{ deck.title }} - Cardberry</title>
-</head>
+{% block content %}
+<style>
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
+    }
 
-<body>
-    <a href="{% url 'deck_list' %}">← Назад к списку</a>
-    <h1>Колода: {{ deck.title }}</h1>
+    .ui-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #eee;
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
 
-    <div class="card-container">
-        {% for card in cards %}
-        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
-            <strong>{{ card.term }}</strong> — {{ card.translation }}
+    .ui-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+    }
 
-            {% if card.image %}
-            <br><img src="{{ card.image.url }}" alt="{{ card.term }}" style="max-width: 200px;">
-            {% endif %}
+    .ui-card strong {
+        color: #2c3e50;
+        font-size: 18px;
+        display: block;
+        margin-bottom: 10px;
+    }
 
-            {% if card.pdf_file %}
-            <br><a href="{{ card.pdf_file.url }}" target="_blank">Открыть PDF</a>
-            {% endif %}
-        </div>
-        {% empty %}
-        <p>В этой колоде пока нет карточек.</p>
-        {% endfor %}
+    .ui-card span {
+        color: #27ae60;
+        font-weight: bold;
+    }
+
+    .add-btn {
+        background: #28a745;
+        color: white;
+        padding: 12px 20px;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+</style>
+
+<h1>{{ deck.title }}</h1>
+<div style="margin-bottom: 30px;">
+    <a href="{% url 'card_create' deck.pk %}" class="add-btn">+ Добавить карточку</a>
+    <a href="{% url 'train_deck' deck.pk %}" style="margin-left: 10px; color: #007bff;">Начать тренировку</a>
+    {% if cards.count >= 1 %}
+    <a href="{% url 'quiz_deck' deck.pk %}" class="btn" style="background-color: #9b59b6; color: white;">
+        🎮 Проверка (Quiz)
+    </a>
+    {% else %}
+    <p style="color: #95a5a6; font-size: 0.9rem;">
+        <i>Добавьте хотя бы одну карту в эту колоду, чтобы начать проверку.</i>
+    </p>
+    {% endif %}
+</div>
+
+<div class="card-grid">
+    {% for card in cards %}
+    <div class="ui-card">
+        <strong class="gender-{{ card.gender|default:'none' }}">
+            {{ card.term }}
+        </strong>
+
+        <span>{{ card.translation }}</span>
+
+        {% if card.image %}
+        <img src="{{ card.image.url }}"
+            style="width: 100%; height: 180px; object-fit: cover; margin-top: 10px; border-radius: 6px;">
+        {% endif %}
     </div>
-</body>
-
-</html>
+    {% empty %}
+    <p>Пока нет карточек.</p>
+    {% endfor %}
+</div>
+{% endblock %}

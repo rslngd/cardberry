@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="de">
+{% extends "base.html" %} {% block title %}Список колод - {{ deck.title }}{% endblock %}
+
+{% block content %}
 
 <head>
     <meta charset="UTF-8">
     <title>Cardberry - Meine Stapel</title>
+    <div style="text-align: right; padding: 10px; background: #eee;">
+        Username: <strong>{{ user.username }}</strong>
+        <form action="{% url 'logout' %}" method="post" style="display: inline; margin-left: 10px;">
+            {% csrf_token %}
+            <button type="submit" style="cursor: pointer;">Abmelden (Выйти)</button>
+        </form>
+    </div>
+    <hr>
 </head>
 
 <body>
@@ -16,5 +27,6 @@
         {% endfor %}
     </ul>
 </body>
+{% endblock %}
 
 </html>
